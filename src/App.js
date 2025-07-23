@@ -427,7 +427,7 @@ const NielsenIQLabelInsight = () => {
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
           <div>
             <h1 style={{ fontSize: '1.5rem', fontWeight: 'bold', color: '#2563eb' }}>NielsenIQ</h1>
-            <p style={{ fontSize: '0.875rem', color: '#6b7280' }}>Label Insight Platform - Albertsons Companies</p>
+            <p style={{ fontSize: '0.875rem', color: '#6b7280' }}>Label Insight Platform - ABC Company INC. Companies</p>
           </div>
           <div style={{ fontSize: '0.875rem', color: '#6b7280' }}>
             {migrationData.overview.totalProducts.toLocaleString()} products indexed
@@ -469,7 +469,7 @@ const NielsenIQLabelInsight = () => {
         {activeTab === 'dashboard' && (
           <div>
             <h2 style={{ fontSize: '1.875rem', fontWeight: 'bold', marginBottom: '1.5rem', color: '#111827' }}>
-              Albertsons Product Intelligence Overview
+              ABC Company INC. Product Intelligence Overview
             </h2>
             
             <div style={{ display: 'grid', gap: '1.5rem', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))' }}>
@@ -551,7 +551,7 @@ const NielsenIQLabelInsight = () => {
                   <Search style={{ position: 'absolute', left: '0.75rem', top: '50%', transform: 'translateY(-50%)', width: '1rem', height: '1rem', color: '#9ca3af' }} />
                   <input
                     type="text"
-                    placeholder="Search Albertsons products, brands, or attributes..."
+                    placeholder="Search ABC Company INC. products, brands, or attributes..."
                     style={styles.searchInput}
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
@@ -572,7 +572,7 @@ const NielsenIQLabelInsight = () => {
               </div>
               
               <p style={{ fontSize: '0.875rem', color: '#6b7280' }}>
-                Showing {filteredProducts.length} of {products.length} Albertsons products
+                Showing {filteredProducts.length} of {products.length} ABC Company INC. products
               </p>
             </div>
 
@@ -595,7 +595,7 @@ const NielsenIQLabelInsight = () => {
         {activeTab === 'migration' && (
           <div>
             <h2 style={{ fontSize: '1.875rem', fontWeight: 'bold', marginBottom: '1.5rem' }}>
-              Albertsons Data Migration Status
+              ABC Company INC. Data Migration Status
             </h2>
             
             <div style={styles.card}>
