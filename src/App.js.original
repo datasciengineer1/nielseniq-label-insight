@@ -1,0 +1,1449 @@
+import React, { useState, useEffect } from 'react';
+import { Search, Filter, Database, Tag, BarChart3, Upload, Download, CheckCircle, AlertCircle, TrendingUp, Package, Star, Award, Clock, Users, ShoppingCart, Target, Zap, FileText, Plus, X, Eye, ChevronDown, ChevronUp } from 'lucide-react';
+
+// Enhanced styles
+const styles = {
+  container: {
+    minHeight: '100vh',
+    backgroundColor: '#f9fafb'
+  },
+  header: {
+    backgroundColor: 'white',
+    borderBottom: '1px solid #e5e7eb',
+    padding: '1rem 2rem'
+  },
+  title: {
+    fontSize: '1.5rem',
+    fontWeight: 'bold',
+    color: '#2563eb'
+  },
+  subtitle: {
+    fontSize: '0.875rem',
+    color: '#6b7280'
+  },
+  nav: {
+    backgroundColor: 'white',
+    borderBottom: '1px solid #e5e7eb',
+    padding: '0 2rem'
+  },
+  tabButton: {
+    padding: '1rem 0.5rem',
+    marginRight: '2rem',
+    border: 'none',
+    background: 'none',
+    cursor: 'pointer',
+    borderBottom: '2px solid transparent',
+    display: 'inline-flex',
+    alignItems: 'center'
+  },
+  activeTab: {
+    borderBottomColor: '#3b82f6',
+    color: '#2563eb'
+  },
+  inactiveTab: {
+    color: '#6b7280'
+  },
+  main: {
+    maxWidth: '80rem',
+    margin: '0 auto',
+    padding: '2rem'
+  },
+  card: {
+    backgroundColor: 'white',
+    borderRadius: '0.5rem',
+    padding: '1.5rem',
+    boxShadow: '0 1px 3px 0 rgba(0, 0, 0, 0.1)',
+    border: '1px solid #e5e7eb',
+    marginBottom: '1.5rem'
+  },
+  grid: {
+    display: 'grid',
+    gap: '1.5rem',
+    gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))'
+  },
+  gridLarge: {
+    display: 'grid',
+    gap: '1.5rem',
+    gridTemplateColumns: 'repeat(auto-fit, minmax(400px, 1fr))'
+  },
+  metricValue: {
+    fontSize: '2rem',
+    fontWeight: 'bold',
+    color: '#111827'
+  },
+  badge: {
+    padding: '0.25rem 0.5rem',
+    borderRadius: '0.375rem',
+    fontSize: '0.75rem',
+    fontWeight: '500',
+    backgroundColor: '#dbeafe',
+    color: '#1e40af',
+    display: 'inline-block',
+    marginRight: '0.5rem',
+    marginBottom: '0.25rem'
+  },
+  greenBadge: {
+    backgroundColor: '#dcfce7',
+    color: '#166534'
+  },
+  redBadge: {
+    backgroundColor: '#fecaca',
+    color: '#dc2626'
+  },
+  yellowBadge: {
+    backgroundColor: '#fef3c7',
+    color: '#d97706'
+  },
+  searchContainer: {
+    display: 'flex',
+    gap: '1rem',
+    alignItems: 'center',
+    marginBottom: '1rem',
+    flexWrap: 'wrap'
+  },
+  searchInput: {
+    flex: '1',
+    minWidth: '300px',
+    padding: '0.75rem 1rem 0.75rem 2.5rem',
+    border: '1px solid #d1d5db',
+    borderRadius: '0.5rem',
+    fontSize: '1rem',
+    position: 'relative'
+  },
+  filterGroup: {
+    display: 'flex',
+    gap: '0.5rem',
+    alignItems: 'center',
+    flexWrap: 'wrap'
+  },
+  select: {
+    padding: '0.75rem',
+    border: '1px solid #d1d5db',
+    borderRadius: '0.5rem',
+    fontSize: '0.875rem',
+    minWidth: '120px'
+  },
+  button: {
+    padding: '0.75rem 1rem',
+    backgroundColor: '#3b82f6',
+    color: 'white',
+    border: 'none',
+    borderRadius: '0.5rem',
+    cursor: 'pointer',
+    fontSize: '0.875rem',
+    display: 'inline-flex',
+    alignItems: 'center'
+  },
+  buttonSecondary: {
+    padding: '0.75rem 1rem',
+    backgroundColor: 'white',
+    color: '#374151',
+    border: '1px solid #d1d5db',
+    borderRadius: '0.5rem',
+    cursor: 'pointer',
+    fontSize: '0.875rem',
+    display: 'inline-flex',
+    alignItems: 'center'
+  },
+  progressBar: {
+    width: '100%',
+    height: '0.5rem',
+    backgroundColor: '#e5e7eb',
+    borderRadius: '0.25rem',
+    overflow: 'hidden'
+  },
+  progressFill: (percentage, color = '#10b981') => ({
+    height: '100%',
+    backgroundColor: color,
+    width: `${percentage}%`,
+    transition: 'width 0.3s ease'
+  }),
+  attributeGrid: {
+    display: 'grid',
+    gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))',
+    gap: '0.5rem',
+    marginTop: '0.5rem'
+  },
+  attributeItem: {
+    display: 'flex',
+    alignItems: 'center',
+    fontSize: '0.75rem',
+    padding: '0.5rem',
+    backgroundColor: '#f9fafb',
+    borderRadius: '0.25rem',
+    border: '1px solid #e5e7eb'
+  },
+  migrationCard: {
+    backgroundColor: 'white',
+    borderRadius: '0.5rem',
+    padding: '1rem',
+    border: '1px solid #e5e7eb',
+    marginBottom: '1rem'
+  },
+  modal: {
+    position: 'fixed',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    zIndex: 1000
+  },
+  modalContent: {
+    backgroundColor: 'white',
+    borderRadius: '0.5rem',
+    padding: '2rem',
+    maxWidth: '800px',
+    maxHeight: '80vh',
+    overflow: 'auto',
+    margin: '1rem'
+  },
+  fileUpload: {
+    border: '2px dashed #d1d5db',
+    borderRadius: '0.5rem',
+    padding: '2rem',
+    textAlign: 'center',
+    cursor: 'pointer'
+  },
+  fileUploadActive: {
+    borderColor: '#3b82f6',
+    backgroundColor: '#eff6ff'
+  }
+};
+
+// Enhanced product data with comprehensive attributions
+const albertsonsProducts = [
+  {
+    id: 'UPC085239127859',
+    name: 'O Organics Whole Grain Oat Cereal',
+    brand: 'O Organics',
+    category: 'Pantry',
+    subCategory: 'Breakfast Cereals',
+    price: 4.99,
+    size: '18 oz',
+    coverage: 98,
+    lastUpdated: '2025-01-22',
+    claims: ['USDA Organic', 'Non-GMO Project Verified', 'Whole Grain', 'No Artificial Colors', 'No High Fructose Corn Syrup', 'No Artificial Preservatives', 'Kosher Certified'],
+    certifications: ['USDA Organic', 'Non-GMO Project Verified', 'Kosher'],
+    nutrition: { calories: 110, protein: 3, fiber: 4, sugar: 6, sodium: 190, fat: 2, carbs: 22 },
+    fullAttributes: {
+      'Dietary & Lifestyle': {
+        'Organic': true,
+        'Non-GMO': true,
+        'Gluten Free': false,
+        'Vegan': true,
+        'Vegetarian': true,
+        'Keto Friendly': false,
+        'Paleo': false,
+        'Low Carb': false,
+        'Kosher': true,
+        'Halal': false
+      },
+      'Health & Nutrition': {
+        'Low Sodium': false,
+        'High Fiber': true,
+        'Whole Grain': true,
+        'Low Sugar': false,
+        'High Protein': false,
+        'Low Fat': true,
+        'Low Calorie': false,
+        'Heart Healthy': true,
+        'Fortified': true,
+        'Probiotic': false
+      },
+      'Clean Label': {
+        'No Artificial Colors': true,
+        'No Artificial Flavors': false,
+        'No Artificial Preservatives': true,
+        'No High Fructose Corn Syrup': true,
+        'No Trans Fat': true,
+        'No MSG': true,
+        'Natural': true,
+        'Minimally Processed': true,
+        'Simple Ingredients': true,
+        'Clean Label': true
+      },
+      'Sourcing & Production': {
+        'Sustainable': true,
+        'Fair Trade': false,
+        'Local': false,
+        'Small Batch': false,
+        'Artisan': false,
+        'Traditional': false,
+        'Cold Pressed': false,
+        'Stone Ground': true,
+        'Hand Crafted': false,
+        'Family Farm': true
+      }
+    },
+    allergens: ['May contain wheat, soy, tree nuts'],
+    tags: ['organic', 'whole-grain', 'breakfast', 'cereal', 'non-gmo'],
+    migrationStatus: 'Complete',
+    dataQuality: 98
+  },
+  {
+    id: 'UPC041190468294',
+    name: 'Stockman & Dakota Grass-Fed Ground Beef',
+    brand: 'Stockman & Dakota',
+    category: 'Meat & Seafood',
+    subCategory: 'Ground Beef',
+    price: 8.99,
+    size: '1 lb',
+    coverage: 100,
+    lastUpdated: '2025-01-21',
+    claims: ['Grass Fed', 'No Added Hormones', 'No Antibiotics Ever', 'Pasture Raised', 'Premium Quality', 'Humanely Raised', 'Ranch Fresh'],
+    certifications: ['American Grassfed Association', 'Animal Welfare Approved', 'Certified Humane'],
+    nutrition: { calories: 240, protein: 22, fiber: 0, sugar: 0, sodium: 75, fat: 17, carbs: 0 },
+    fullAttributes: {
+      'Dietary & Lifestyle': {
+        'Organic': false,
+        'Grass Fed': true,
+        'Gluten Free': true,
+        'Vegan': false,
+        'Vegetarian': false,
+        'Keto Friendly': true,
+        'Paleo': true,
+        'Low Carb': true,
+        'Kosher': false,
+        'Halal': false
+      },
+      'Health & Nutrition': {
+        'Low Sodium': true,
+        'High Protein': true,
+        'Zero Carbs': true,
+        'Natural': true,
+        'Hormone Free': true,
+        'Antibiotic Free': true,
+        'Omega-3 Rich': true,
+        'Iron Rich': true,
+        'B-Vitamin Rich': true,
+        'Zinc Rich': true
+      },
+      'Animal Welfare': {
+        'Pasture Raised': true,
+        'Free Range': true,
+        'Humanely Raised': true,
+        'No Confinement': true,
+        'Access to Outdoors': true,
+        'Natural Diet': true,
+        'Stress Free': true,
+        'Third Party Verified': true,
+        'Family Farm': true,
+        'Ethical': true
+      },
+      'Sourcing & Production': {
+        'Premium': true,
+        'Sustainable': true,
+        'Local Ranch': true,
+        'American Made': true,
+        'Ranch Fresh': true,
+        'Quality Assured': true,
+        'Traceable': true,
+        'Small Batch': false,
+        'Traditional Methods': true,
+        'Carefully Selected': true
+      }
+    },
+    allergens: ['None'],
+    tags: ['grass-fed', 'beef', 'premium', 'hormone-free', 'antibiotic-free'],
+    migrationStatus: 'Complete',
+    dataQuality: 100
+  },
+  {
+    id: 'UPC041415237864',
+    name: 'Farm Fresh Organic Baby Spinach',
+    brand: 'Farm Fresh',
+    category: 'Fruits & Vegetables',
+    subCategory: 'Leafy Greens',
+    price: 3.49,
+    size: '5 oz',
+    coverage: 95,
+    lastUpdated: '2025-01-22',
+    claims: ['USDA Organic', 'Pesticide Free', 'Triple Washed', 'Ready to Eat', 'Locally Grown', 'Fresh Picked'],
+    certifications: ['USDA Organic', 'California Organic', 'Good Agricultural Practices'],
+    nutrition: { calories: 20, protein: 2, fiber: 2, sugar: 0, sodium: 65, fat: 0, carbs: 3 },
+    fullAttributes: {
+      'Dietary & Lifestyle': {
+        'Organic': true,
+        'Pesticide Free': true,
+        'Gluten Free': true,
+        'Vegan': true,
+        'Vegetarian': true,
+        'Keto Friendly': true,
+        'Paleo': true,
+        'Low Carb': true,
+        'Raw': true,
+        'Kosher': true
+      },
+      'Health & Nutrition': {
+        'Low Sodium': true,
+        'Low Calorie': true,
+        'High Iron': true,
+        'High Folate': true,
+        'Vitamin K Rich': true,
+        'Antioxidant Rich': true,
+        'Nutrient Dense': true,
+        'Heart Healthy': true,
+        'Eye Health': true,
+        'Immune Support': true
+      },
+      'Freshness & Quality': {
+        'Fresh': true,
+        'Ready to Eat': true,
+        'Triple Washed': true,
+        'Crisp': true,
+        'Tender': true,
+        'Baby Leaves': true,
+        'Premium Quality': true,
+        'Hand Selected': true,
+        'Quick Chill': true,
+        'Moisture Controlled': true
+      },
+      'Sourcing & Production': {
+        'Locally Grown': true,
+        'Sustainable': true,
+        'Family Farm': true,
+        'Seasonal': true,
+        'Fresh Picked': true,
+        'Field Fresh': true,
+        'Eco Friendly': true,
+        'Responsible Farming': true,
+        'California Grown': true,
+        'Small Farm': true
+      }
+    },
+    allergens: ['None'],
+    tags: ['organic', 'spinach', 'leafy-greens', 'vegetables', 'pesticide-free'],
+    migrationStatus: 'Complete',
+    dataQuality: 95
+  }
+];
+
+const categories = ['All', 'Pantry', 'Meat & Seafood', 'Fruits & Vegetables', 'Bakery', 'Dairy, Eggs & Cheese', 'Deli'];
+const brands = ['All', 'O Organics', 'Stockman & Dakota', 'Farm Fresh', 'Arctic Shores', 'Culinary Circle', 'Equaline', 'Wild Harvest'];
+
+const migrationData = {
+  overview: {
+    totalProducts: 847293,
+    processed: 802428,
+    inProgress: 28965,
+    pending: 15900,
+    overallProgress: 94.7
+  },
+  categories: [
+    { name: 'Store Brands Integration', progress: 100, total: 13, completed: 13, status: 'Complete' },
+    { name: 'Organic Claims Verification', progress: 96, total: 15847, completed: 15213, status: 'In Progress' },
+    { name: 'Nutritional Data Mapping', progress: 98, total: 847293, completed: 830347, status: 'In Progress' },
+    { name: 'Allergen Information', progress: 94, total: 534289, completed: 502231, status: 'In Progress' },
+    { name: 'Certification Validation', progress: 89, total: 67834, completed: 60372, status: 'In Progress' },
+    { name: 'Attribute Enrichment', progress: 92, total: 847293, completed: 779510, status: 'In Progress' }
+  ],
+  recentActivity: [
+    { time: '2025-01-22 11:15', action: 'Completed O Organics product line enrichment (2,847 SKUs)', type: 'success' },
+    { time: '2025-01-22 10:45', action: 'Validated Stockman & Dakota grass-fed claims (156 products)', type: 'success' },
+    { time: '2025-01-22 10:30', action: 'Started Arctic Shores sustainability certification import', type: 'info' },
+    { time: '2025-01-22 09:15', action: 'Updated Farm Fresh organic database sync', type: 'success' },
+    { time: '2025-01-22 08:45', action: 'Culinary Circle artisan attributes mapping in progress', type: 'warning' },
+    { time: '2025-01-21 16:30', action: 'Wild Harvest USDA organic verification complete', type: 'success' },
+    { time: '2025-01-21 15:45', action: 'Equaline probiotic claims validation finished', type: 'success' },
+    { time: '2025-01-21 14:20', action: 'Stone Ridge premium ice cream attributes updated', type: 'success' }
+  ]
+};
+
+// Template for new products
+const productTemplate = {
+  id: '',
+  name: '',
+  brand: '',
+  category: '',
+  subCategory: '',
+  price: 0,
+  size: '',
+  coverage: 0,
+  lastUpdated: new Date().toISOString().split('T')[0],
+  claims: [],
+  certifications: [],
+  nutrition: { calories: 0, protein: 0, fiber: 0, sugar: 0, sodium: 0, fat: 0, carbs: 0 },
+  fullAttributes: {
+    'Dietary & Lifestyle': {
+      'Organic': false,
+      'Non-GMO': false,
+      'Gluten Free': false,
+      'Vegan': false,
+      'Vegetarian': false,
+      'Keto Friendly': false,
+      'Paleo': false,
+      'Low Carb': false,
+      'Kosher': false,
+      'Halal': false
+    },
+    'Health & Nutrition': {
+      'Low Sodium': false,
+      'High Fiber': false,
+      'Whole Grain': false,
+      'Low Sugar': false,
+      'High Protein': false,
+      'Low Fat': false,
+      'Low Calorie': false,
+      'Heart Healthy': false,
+      'Fortified': false,
+      'Probiotic': false
+    },
+    'Clean Label': {
+      'No Artificial Colors': false,
+      'No Artificial Flavors': false,
+      'No Artificial Preservatives': false,
+      'No High Fructose Corn Syrup': false,
+      'No Trans Fat': false,
+      'No MSG': false,
+      'Natural': false,
+      'Minimally Processed': false,
+      'Simple Ingredients': false,
+      'Clean Label': false
+    },
+    'Sourcing & Production': {
+      'Sustainable': false,
+      'Fair Trade': false,
+      'Local': false,
+      'Small Batch': false,
+      'Artisan': false,
+      'Traditional': false,
+      'Premium': false,
+      'Family Farm': false,
+      'Hand Crafted': false,
+      'Quality Assured': false
+    }
+  },
+  allergens: [],
+  tags: [],
+  migrationStatus: 'Pending',
+  dataQuality: 0
+};
+
+const NielsenIQLabelInsight = () => {
+  const [activeTab, setActiveTab] = useState('dashboard');
+  const [searchTerm, setSearchTerm] = useState('');
+  const [selectedCategory, setSelectedCategory] = useState('All');
+  const [selectedBrand, setSelectedBrand] = useState('All');
+  const [filteredProducts, setFilteredProducts] = useState(albertsonsProducts);
+  const [products, setProducts] = useState(albertsonsProducts);
+  const [showAttributeModal, setShowAttributeModal] = useState(false);
+  const [selectedProduct, setSelectedProduct] = useState(null);
+  const [showImportModal, setShowImportModal] = useState(false);
+  const [expandedProduct, setExpandedProduct] = useState(null);
+
+  useEffect(() => {
+    const filtered = products.filter(product => {
+      const matchesSearch = product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                          product.brand.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                          product.tags.some(tag => tag.toLowerCase().includes(searchTerm.toLowerCase()));
+      const matchesCategory = selectedCategory === 'All' || product.category === selectedCategory;
+      const matchesBrand = selectedBrand === 'All' || product.brand === selectedBrand;
+      return matchesSearch && matchesCategory && matchesBrand;
+    });
+    setFilteredProducts(filtered);
+  }, [searchTerm, selectedCategory, selectedBrand, products]);
+
+  // Export functions
+  const exportProducts = () => {
+    const dataStr = JSON.stringify(products, null, 2);
+    const dataUri = 'data:application/json;charset=utf-8,'+ encodeURIComponent(dataStr);
+    const exportFileDefaultName = `albertsons_products_${new Date().toISOString().split('T')[0]}.json`;
+    
+    const linkElement = document.createElement('a');
+    linkElement.setAttribute('href', dataUri);
+    linkElement.setAttribute('download', exportFileDefaultName);
+    linkElement.click();
+  };
+
+  const exportCSV = () => {
+    const headers = ['ID', 'Name', 'Brand', 'Category', 'Price', 'Size', 'Coverage', 'Claims', 'Allergens'];
+    const csvContent = [
+      headers.join(','),
+      ...products.map(product => [
+        product.id,
+        `"${product.name}"`,
+        product.brand,
+        product.category,
+        product.price,
+        product.size,
+        product.coverage,
+        `"${product.claims.join('; ')}"`,
+        `"${product.allergens.join('; ')}"`
+      ].join(','))
+    ].join('\n');
+
+    const dataUri = 'data:text/csv;charset=utf-8,'+ encodeURIComponent(csvContent);
+    const exportFileDefaultName = `albertsons_products_${new Date().toISOString().split('T')[0]}.csv`;
+    
+    const linkElement = document.createElement('a');
+    linkElement.setAttribute('href', dataUri);
+    linkElement.setAttribute('download', exportFileDefaultName);
+    linkElement.click();
+  };
+
+  const downloadTemplate = () => {
+    const template = [productTemplate, productTemplate, productTemplate]; // 3 empty rows
+    const dataStr = JSON.stringify(template, null, 2);
+    const dataUri = 'data:application/json;charset=utf-8,'+ encodeURIComponent(dataStr);
+    const exportFileDefaultName = 'albertsons_product_template.json';
+    
+    const linkElement = document.createElement('a');
+    linkElement.setAttribute('href', dataUri);
+    linkElement.setAttribute('download', exportFileDefaultName);
+    linkElement.click();
+  };
+
+  const downloadCSVTemplate = () => {
+    const headers = ['ID', 'Name', 'Brand', 'Category', 'SubCategory', 'Price', 'Size', 'Claims', 'Certifications', 'Allergens', 'Tags'];
+    const sampleRows = [
+      ['UPC123456789', 'Sample Product Name', 'Brand Name', 'Category', 'SubCategory', '4.99', '16 oz', 'Claim1; Claim2', 'Cert1; Cert2', 'Allergen1; Allergen2', 'tag1; tag2'],
+      ['UPC987654321', 'Another Product', 'Another Brand', 'Category', 'SubCategory', '6.99', '24 oz', 'Organic; Non-GMO', 'USDA Organic', 'None', 'organic; healthy'],
+      ['', '', '', '', '', '', '', '', '', '', '']
+    ];
+    
+    const csvContent = [
+      headers.join(','),
+      ...sampleRows.map(row => row.map(cell => `"${cell}"`).join(','))
+    ].join('\n');
+
+    const dataUri = 'data:text/csv;charset=utf-8,'+ encodeURIComponent(csvContent);
+    const exportFileDefaultName = 'albertsons_product_template.csv';
+    
+    const linkElement = document.createElement('a');
+    linkElement.setAttribute('href', dataUri);
+    linkElement.setAttribute('download', exportFileDefaultName);
+    linkElement.click();
+  };
+
+  const MetricCard = ({ title, value, unit, trend, icon: Icon, status, description }) => (
+    <div style={styles.card}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+        <div style={{ flex: 1 }}>
+          <p style={{ fontSize: '0.875rem', color: '#6b7280', fontWeight: '500' }}>{title}</p>
+          <p style={styles.metricValue}>
+            {typeof value === 'number' && value > 1000 ? value.toLocaleString() : value}{unit}
+          </p>
+          {trend && (
+            <p style={{ fontSize: '0.875rem', color: '#059669', display: 'flex', alignItems: 'center', marginTop: '0.25rem' }}>
+              <TrendingUp style={{ width: '1rem', height: '1rem', marginRight: '0.25rem' }} />
+              {trend}
+            </p>
+          )}
+          {description && (
+            <p style={{ fontSize: '0.75rem', color: '#9ca3af', marginTop: '0.25rem' }}>{description}</p>
+          )}
+        </div>
+        <div style={{ 
+          padding: '0.75rem', 
+          borderRadius: '50%', 
+          backgroundColor: status === 'excellent' ? '#dcfce7' : status === 'good' ? '#dbeafe' : '#fef3c7' 
+        }}>
+          <Icon style={{ 
+            width: '1.5rem', 
+            height: '1.5rem', 
+            color: status === 'excellent' ? '#059669' : status === 'good' ? '#2563eb' : '#d97706' 
+          }} />
+        </div>
+      </div>
+    </div>
+  );
+
+  const AttributeModal = ({ product, onClose }) => {
+    if (!product) return null;
+
+    return (
+      <div style={styles.modal} onClick={onClose}>
+        <div style={styles.modalContent} onClick={(e) => e.stopPropagation()}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
+            <h2 style={{ fontSize: '1.5rem', fontWeight: 'bold', color: '#111827' }}>
+              Complete Product Attributions
+            </h2>
+            <button 
+              onClick={onClose}
+              style={{ background: 'none', border: 'none', cursor: 'pointer' }}
+            >
+              <X style={{ width: '1.5rem', height: '1.5rem', color: '#6b7280' }} />
+            </button>
+          </div>
+          
+          <div style={{ marginBottom: '1rem' }}>
+            <h3 style={{ fontSize: '1.125rem', fontWeight: '600', color: '#374151' }}>{product.name}</h3>
+            <p style={{ fontSize: '0.875rem', color: '#6b7280' }}>{product.brand} • {product.category}</p>
+          </div>
+
+          {Object.entries(product.fullAttributes).map(([categoryName, attributes]) => (
+            <div key={categoryName} style={{ marginBottom: '2rem' }}>
+              <h4 style={{ 
+                fontSize: '1rem', 
+                fontWeight: '600', 
+                color: '#374151', 
+                marginBottom: '1rem',
+                paddingBottom: '0.5rem',
+                borderBottom: '2px solid #e5e7eb'
+              }}>
+                {categoryName}
+              </h4>
+              <div style={{ 
+                display: 'grid', 
+                gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', 
+                gap: '0.5rem' 
+              }}>
+                {Object.entries(attributes).map(([attr, value]) => (
+                  <div key={attr} style={styles.attributeItem}>
+                    {value ? 
+                      <CheckCircle style={{ width: '1rem', height: '1rem', color: '#059669', marginRight: '0.5rem' }} /> : 
+                      <AlertCircle style={{ width: '1rem', height: '1rem', color: '#d1d5db', marginRight: '0.5rem' }} />
+                    }
+                    <span style={{ 
+                      color: value ? '#059669' : '#9ca3af',
+                      fontWeight: value ? '500' : '400'
+                    }}>
+                      {attr}
+                    </span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    );
+  };
+
+  const ImportModal = () => (
+    <div style={styles.modal} onClick={() => setShowImportModal(false)}>
+      <div style={styles.modalContent} onClick={(e) => e.stopPropagation()}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
+          <h2 style={{ fontSize: '1.5rem', fontWeight: 'bold', color: '#111827' }}>
+            Import Products
+          </h2>
+          <button 
+            onClick={() => setShowImportModal(false)}
+            style={{ background: 'none', border: 'none', cursor: 'pointer' }}
+          >
+            <X style={{ width: '1.5rem', height: '1.5rem', color: '#6b7280' }} />
+          </button>
+        </div>
+
+        <div style={{ marginBottom: '2rem' }}>
+          <h3 style={{ fontSize: '1.125rem', fontWeight: '600', marginBottom: '1rem' }}>Download Templates</h3>
+          <div style={{ display: 'flex', gap: '1rem', marginBottom: '2rem' }}>
+            <button onClick={downloadTemplate} style={styles.button}>
+              <Download style={{ width: '1rem', height: '1rem', marginRight: '0.5rem' }} />
+              JSON Template
+            </button>
+            <button onClick={downloadCSVTemplate} style={styles.buttonSecondary}>
+              <Download style={{ width: '1rem', height: '1rem', marginRight: '0.5rem' }} />
+              CSV Template
+            </button>
+          </div>
+        </div>
+
+        <div>
+          <h3 style={{ fontSize: '1.125rem', fontWeight: '600', marginBottom: '1rem' }}>Upload File</h3>
+          <div style={styles.fileUpload}>
+            <Upload style={{ width: '3rem', height: '3rem', color: '#9ca3af', margin: '0 auto 1rem' }} />
+            <p style={{ fontSize: '1rem', color: '#374151', marginBottom: '0.5rem' }}>
+              Click to upload or drag and drop
+            </p>
+            <p style={{ fontSize: '0.875rem', color: '#6b7280' }}>
+              JSON or CSV files only
+            </p>
+            <input 
+              type="file" 
+              accept=".json,.csv" 
+              style={{ display: 'none' }}
+              onChange={(e) => {
+                // Handle file upload logic here
+                console.log('File selected:', e.target.files[0]);
+              }}
+            />
+          </div>
+        </div>
+
+        <div style={{ marginTop: '2rem' }}>
+          <h4 style={{ fontSize: '1rem', fontWeight: '600', marginBottom: '0.5rem' }}>Template Structure:</h4>
+          <pre style={{ 
+            backgroundColor: '#f3f4f6', 
+            padding: '1rem', 
+            borderRadius: '0.5rem', 
+            fontSize: '0.75rem',
+            overflow: 'auto',
+            maxHeight: '200px'
+          }}>
+{`{
+  "id": "UPC123456789",
+  "name": "Product Name",
+  "brand": "Brand Name",
+  "category": "Category",
+  "subCategory": "SubCategory",
+  "price": 4.99,
+  "size": "16 oz",
+  "claims": ["Claim1", "Claim2"],
+  "certifications": ["Cert1"],
+  "allergens": ["Allergen1"],
+  "tags": ["tag1", "tag2"]
+}`}
+          </pre>
+        </div>
+      </div>
+    </div>
+  );
+
+  const ProductCard = ({ product }) => {
+    const isExpanded = expandedProduct === product.id;
+    
+    return (
+      <div style={styles.card}>
+        <div style={{ marginBottom: '1rem' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'start', marginBottom: '0.5rem' }}>
+            <div style={{ flex: 1 }}>
+              <div style={{ display: 'flex', alignItems: 'center', marginBottom: '0.5rem', flexWrap: 'wrap' }}>
+                <h3 style={{ fontSize: '1.125rem', fontWeight: '600', marginRight: '0.5rem', marginBottom: '0.25rem' }}>
+                  {product.name}
+                </h3>
+                {product.fullAttributes?.['Dietary & Lifestyle']?.Organic && (
+                  <span style={{ ...styles.badge, ...styles.greenBadge }}>
+                    <Award style={{ width: '0.75rem', height: '0.75rem', marginRight: '0.25rem', verticalAlign: 'middle' }} />
+                    Organic
+                  </span>
+                )}
+                {product.fullAttributes?.['Sourcing & Production']?.Premium && (
+                  <span style={{ ...styles.badge, backgroundColor: '#fef3c7', color: '#d97706' }}>
+                    <Star style={{ width: '0.75rem', height: '0.75rem', marginRight: '0.25rem', verticalAlign: 'middle' }} />
+                    Premium
+                  </span>
+                )}
+              </div>
+              <p style={{ fontSize: '0.875rem', color: '#6b7280', fontWeight: '500' }}>{product.brand}</p>
+              <p style={{ fontSize: '0.875rem', color: '#9ca3af' }}>{product.category} • {product.subCategory}</p>
+              <div style={{ display: 'flex', alignItems: 'center', marginTop: '0.25rem', flexWrap: 'wrap' }}>
+                <p style={{ fontSize: '0.875rem', fontWeight: '600', color: '#059669', marginRight: '1rem' }}>
+                  ${product.price}
+                </p>
+                <p style={{ fontSize: '0.75rem', color: '#9ca3af', marginRight: '1rem' }}>{product.size}</p>
+                <p style={{ fontSize: '0.75rem', color: '#9ca3af' }}>UPC: {product.id}</p>
+              </div>
+            </div>
+            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'end' }}>
+              <span style={{
+                ...styles.badge,
+                ...(product.coverage >= 95 ? styles.greenBadge : 
+                    product.coverage >= 90 ? styles.yellowBadge : styles.redBadge)
+              }}>
+                {product.coverage}% Coverage
+              </span>
+              <div style={{ display: 'flex', alignItems: 'center', marginTop: '0.25rem' }}>
+                {[...Array(5)].map((_, i) => (
+                  <Star key={i} style={{ 
+                    width: '0.75rem', 
+                    height: '0.75rem', 
+                    color: i < 4 ? '#fbbf24' : '#d1d5db',
+                    fill: i < 4 ? '#fbbf24' : 'none'
+                  }} />
+                ))}
+                <span style={{ fontSize: '0.75rem', color: '#9ca3af', marginLeft: '0.25rem' }}>4.2</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Quick Attributions Preview */}
+        <div style={{ marginBottom: '1rem' }}>
+          <h4 style={{ fontSize: '0.875rem', fontWeight: '600', marginBottom: '0.5rem', color: '#374151' }}>
+            Key Attributes
+          </h4>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(120px, 1fr))', gap: '0.25rem' }}>
+            {product.fullAttributes && Object.values(product.fullAttributes).slice(0, 2).map((category, catIdx) => 
+              Object.entries(category).slice(0, 3).map(([attr, value], idx) => (
+                <div key={`${catIdx}-${idx}`} style={{ display: 'flex', alignItems: 'center', fontSize: '0.75rem' }}>
+                  {value ? 
+                    <CheckCircle style={{ width: '0.75rem', height: '0.75rem', color: '#059669', marginRight: '0.25rem' }} /> : 
+                    <AlertCircle style={{ width: '0.75rem', height: '0.75rem', color: '#d1d5db', marginRight: '0.25rem' }} />
+                  }
+                  <span style={{ color: value ? '#059669' : '#9ca3af' }}>{attr}</span>
+                </div>
+              ))
+            )}
+          </div>
+        </div>
+
+        {/* Expandable section */}
+        {isExpanded && (
+          <div style={{ marginBottom: '1rem' }}>
+            <div style={{ marginBottom: '1rem' }}>
+              <h4 style={{ fontSize: '0.875rem', fontWeight: '600', marginBottom: '0.5rem', color: '#374151' }}>
+                Claims & Certifications
+              </h4>
+              <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.25rem', marginBottom: '0.75rem' }}>
+                {product.claims.map((claim, idx) => (
+                  <span key={idx} style={styles.badge}>
+                    {claim}
+                  </span>
+                ))}
+              </div>
+            </div>
+
+            <div style={{ marginBottom: '1rem' }}>
+              <h4 style={{ fontSize: '0.875rem', fontWeight: '600', marginBottom: '0.5rem', color: '#374151' }}>
+                Nutritional Profile
+              </h4>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(80px, 1fr))', gap: '0.5rem' }}>
+                {Object.entries(product.nutrition).map(([key, value]) => (
+                  <div key={key} style={{ textAlign: 'center', padding: '0.5rem', backgroundColor: '#f9fafb', borderRadius: '0.25rem' }}>
+                    <div style={{ fontSize: '0.875rem', fontWeight: '600', color: '#111827' }}>{value}{key === 'calories' ? '' : key.includes('sodium') ? 'mg' : 'g'}</div>
+                    <div style={{ fontSize: '0.75rem', color: '#6b7280', textTransform: 'capitalize' }}>{key}</div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {product.allergens && product.allergens[0] !== 'None' && (
+              <div style={{ 
+                backgroundColor: '#fef3c7', 
+                border: '1px solid #fbbf24', 
+                borderRadius: '0.375rem', 
+                padding: '0.75rem',
+                marginBottom: '1rem'
+              }}>
+                <h4 style={{ fontSize: '0.75rem', fontWeight: '600', color: '#92400e', marginBottom: '0.25rem' }}>
+                  Allergen Information
+                </h4>
+                <p style={{ fontSize: '0.75rem', color: '#92400e' }}>{product.allergens.join(', ')}</p>
+              </div>
+            )}
+          </div>
+        )}
+
+        <div style={{ 
+          paddingTop: '0.75rem', 
+          borderTop: '1px solid #e5e7eb', 
+          display: 'flex', 
+          justifyContent: 'space-between', 
+          alignItems: 'center' 
+        }}>
+          <div style={{ fontSize: '0.75rem', color: '#9ca3af' }}>
+            <div>Updated: {product.lastUpdated}</div>
+            <div>Migration: <span style={{ color: product.migrationStatus === 'Complete' ? '#059669' : '#d97706' }}>
+              {product.migrationStatus}
+            </span></div>
+          </div>
+          <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
+            <button 
+              onClick={() => setExpandedProduct(isExpanded ? null : product.id)}
+              style={{ 
+                fontSize: '0.75rem', 
+                color: '#2563eb', 
+                background: 'none', 
+                border: 'none', 
+                cursor: 'pointer',
+                display: 'flex',
+                alignItems: 'center'
+              }}
+            >
+              {isExpanded ? <ChevronUp style={{ width: '1rem', height: '1rem', marginRight: '0.25rem' }} /> : <ChevronDown style={{ width: '1rem', height: '1rem', marginRight: '0.25rem' }} />}
+              {isExpanded ? 'Less' : 'More'}
+            </button>
+            <button 
+              onClick={() => {
+                setSelectedProduct(product);
+                setShowAttributeModal(true);
+              }}
+              style={{ 
+                fontSize: '0.75rem', 
+                color: '#7c3aed', 
+                background: 'none', 
+                border: 'none', 
+                cursor: 'pointer',
+                display: 'flex',
+                alignItems: 'center'
+              }}
+            >
+              <Eye style={{ width: '1rem', height: '1rem', marginRight: '0.25rem' }} />
+              All Attributes
+            </button>
+            <button style={{ 
+              fontSize: '0.75rem', 
+              color: '#059669', 
+              background: 'none', 
+              border: 'none', 
+              cursor: 'pointer' 
+            }}>
+              Export
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  };
+
+  return (
+    <div style={styles.container}>
+      {/* Header */}
+      <header style={styles.header}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+          <div>
+            <h1 style={styles.title}>NielsenIQ</h1>
+            <p style={styles.subtitle}>Label Insight Platform - Albertsons Companies</p>
+          </div>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.875rem', color: '#6b7280' }}>
+              <div style={{ width: '0.5rem', height: '0.5rem', backgroundColor: '#10b981', borderRadius: '50%' }}></div>
+              <span>Live Data Feed</span>
+            </div>
+            <div style={{ fontSize: '0.875rem', color: '#6b7280' }}>
+              {migrationData.overview.totalProducts.toLocaleString()} products indexed
+            </div>
+          </div>
+        </div>
+      </header>
+
+      {/* Navigation */}
+      <nav style={styles.nav}>
+        {[
+          { id: 'dashboard', name: 'Dashboard', icon: BarChart3 },
+          { id: 'products', name: 'Product Catalog', icon: Package },
+          { id: 'migration', name: 'Data Migration', icon: Database },
+          { id: 'attributes', name: 'Attributes', icon: Tag }
+        ].map((tab) => (
+          <button
+            key={tab.id}
+            onClick={() => setActiveTab(tab.id)}
+            style={{
+              ...styles.tabButton,
+              ...(activeTab === tab.id ? styles.activeTab : styles.inactiveTab)
+            }}
+          >
+            <tab.icon style={{ width: '1rem', height: '1rem', marginRight: '0.5rem' }} />
+            {tab.name}
+          </button>
+        ))}
+      </nav>
+
+      {/* Main Content */}
+      <main style={styles.main}>
+        {activeTab === 'dashboard' && (
+          <div>
+            <h2 style={{ fontSize: '1.875rem', fontWeight: 'bold', marginBottom: '1.5rem', color: '#111827' }}>
+              Albertsons Product Intelligence Overview
+            </h2>
+            
+            <div style={styles.grid}>
+              <MetricCard
+                title="SKU Coverage"
+                value={96.8}
+                unit="%"
+                trend="+1.8% this month"
+                icon={Package}
+                status="excellent"
+                description="Albertsons product catalog"
+              />
+              <MetricCard
+                title="Data Freshness"
+                value={16}
+                unit=" hours"
+                trend="Within SLA"
+                icon={Clock}
+                status="excellent"
+                description="Average update frequency"
+              />
+              <MetricCard
+                title="Enriched Attributes"
+                value={27}
+                unit=" avg/SKU"
+                trend="+4 attributes"
+                icon={Tag}
+                status="excellent"
+                description="NielsenIQ Label Insight data"
+              />
+              <MetricCard
+                title="Migration Progress"
+                value={94.7}
+                unit="%"
+                trend="On schedule"
+                icon={TrendingUp}
+                status="excellent"
+                description="Overall data integration"
+              />
+              <MetricCard
+                title="Store Brands"
+                value={13}
+                unit=""
+                trend="100% integrated"
+                icon={Award}
+                status="excellent"
+                description="All Albertsons brands"
+              />
+              <MetricCard
+                title="Search Performance"
+                value={22.4}
+                unit="%"
+                trend="+18% improvement"
+                icon={Target}
+                status="excellent"
+                description="Customer search success"
+              />
+            </div>
+
+            <div style={styles.card}>
+              <h3 style={{ fontSize: '1.125rem', fontWeight: '600', marginBottom: '1rem', color: '#111827' }}>
+                Store Brand Performance Insights
+              </h3>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1rem' }}>
+                <div style={{ textAlign: 'center', padding: '1rem', backgroundColor: '#f0fdf4', borderRadius: '0.5rem' }}>
+                  <p style={{ fontSize: '2rem', fontWeight: 'bold', color: '#166534', margin: '0 0 0.5rem 0' }}>89%</p>
+                  <p style={{ fontSize: '0.875rem', color: '#166534' }}>O Organics products with clean label attributes</p>
+                </div>
+                <div style={{ textAlign: 'center', padding: '1rem', backgroundColor: '#eff6ff', borderRadius: '0.5rem' }}>
+                  <p style={{ fontSize: '2rem', fontWeight: 'bold', color: '#1d4ed8', margin: '0 0 0.5rem 0' }}>156</p>
+                  <p style={{ fontSize: '0.875rem', color: '#1d4ed8' }}>Culinary Circle premium products identified</p>
+                </div>
+                <div style={{ textAlign: 'center', padding: '1rem', backgroundColor: '#faf5ff', borderRadius: '0.5rem' }}>
+                  <p style={{ fontSize: '2rem', fontWeight: 'bold', color: '#7c3aed', margin: '0 0 0.5rem 0' }}>94%</p>
+                  <p style={{ fontSize: '0.875rem', color: '#7c3aed' }}>Stockman & Dakota with premium certifications</p>
+                </div>
+              </div>
+            </div>
+
+            <div style={styles.card}>
+              <h3 style={{ fontSize: '1.125rem', fontWeight: '600', marginBottom: '1rem', color: '#111827' }}>
+                Recent Label Insight Activity
+              </h3>
+              <div>
+                {[
+                  'Enhanced 2,847 O Organics products with certified organic claims verification',
+                  'Updated allergen information for 1,284 Albertsons store brand products',
+                  'Generated premium attribute tags for 445 Culinary Circle artisan items',
+                  'Validated sustainability claims for Arctic Shores seafood products',
+                  'Completed Wild Harvest organic certification database sync'
+                ].map((activity, idx) => (
+                  <div key={idx} style={{ display: 'flex', alignItems: 'center', marginBottom: '0.75rem' }}>
+                    <div style={{ 
+                      width: '0.375rem', 
+                      height: '0.375rem', 
+                      backgroundColor: '#3b82f6', 
+                      borderRadius: '50%', 
+                      marginRight: '0.75rem' 
+                    }}></div>
+                    <span style={{ fontSize: '0.875rem', color: '#6b7280' }}>{activity}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        )}
+
+        {activeTab === 'products' && (
+          <div>
+            <div style={styles.card}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
+                <h2 style={{ fontSize: '1.25rem', fontWeight: 'bold', color: '#111827' }}>Product Catalog</h2>
+                <div style={{ display: 'flex', gap: '0.5rem' }}>
+                  <button onClick={() => setShowImportModal(true)} style={styles.button}>
+                    <Plus style={{ width: '1rem', height: '1rem', marginRight: '0.5rem' }} />
+                    Add Products
+                  </button>
+                  <button onClick={exportProducts} style={styles.buttonSecondary}>
+                    <Download style={{ width: '1rem', height: '1rem', marginRight: '0.5rem' }} />
+                    Export JSON
+                  </button>
+                  <button onClick={exportCSV} style={styles.buttonSecondary}>
+                    <Download style={{ width: '1rem', height: '1rem', marginRight: '0.5rem' }} />
+                    Export CSV
+                  </button>
+                </div>
+              </div>
+
+              <div style={styles.searchContainer}>
+                <div style={{ position: 'relative', flex: '1', minWidth: '300px' }}>
+                  <Search style={{ 
+                    position: 'absolute', 
+                    left: '0.75rem', 
+                    top: '50%', 
+                    transform: 'translateY(-50%)',
+                    width: '1rem', 
+                    height: '1rem', 
+                    color: '#9ca3af' 
+                  }} />
+                  <input
+                    type="text"
+                    placeholder="Search Albertsons products, brands, or attributes..."
+                    style={styles.searchInput}
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                  />
+                </div>
+                <div style={styles.filterGroup}>
+                  <select
+                    style={styles.select}
+                    value={selectedCategory}
+                    onChange={(e) => setSelectedCategory(e.target.value)}
+                  >
+                    {categories.map(category => (
+                      <option key={category} value={category}>{category}</option>
+                    ))}
+                  </select>
+                  <select
+                    style={styles.select}
+                    value={selectedBrand}
+                    onChange={(e) => setSelectedBrand(e.target.value)}
+                  >
+                    {brands.map(brand => (
+                      <option key={brand} value={brand}>{brand}</option>
+                    ))}
+                  </select>
+                  <button style={styles.buttonSecondary}>
+                    <Filter style={{ width: '1rem', height: '1rem', marginRight: '0.5rem' }} />
+                    Advanced
+                  </button>
+                </div>
+              </div>
+              
+              <p style={{ fontSize: '0.875rem', color: '#6b7280' }}>
+                Showing {filteredProducts.length} of {products.length} Albertsons products
+              </p>
+            </div>
+
+            <div style={styles.gridLarge}>
+              {filteredProducts.map(product => (
+                <ProductCard key={product.id} product={product} />
+              ))}
+            </div>
+
+            {filteredProducts.length === 0 && (
+              <div style={{ textAlign: 'center', padding: '3rem' }}>
+                <Package style={{ width: '3rem', height: '3rem', color: '#d1d5db', margin: '0 auto 1rem' }} />
+                <h3 style={{ fontSize: '1.125rem', fontWeight: '500', color: '#111827', marginBottom: '0.5rem' }}>
+                  No products found
+                </h3>
+                <p style={{ color: '#6b7280' }}>Try adjusting your search criteria or filters</p>
+              </div>
+            )}
+          </div>
+        )}
+
+        {activeTab === 'migration' && (
+          <div>
+            <h2 style={{ fontSize: '1.875rem', fontWeight: 'bold', marginBottom: '1.5rem', color: '#111827' }}>
+              Albertsons Data Migration Status
+            </h2>
+
+            <div style={styles.card}>
+              <h3 style={{ fontSize: '1.25rem', fontWeight: '600', marginBottom: '1rem', color: '#111827' }}>
+                Migration Overview
+              </h3>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))', gap: '1rem', marginBottom: '1.5rem' }}>
+                <div style={{ textAlign: 'center' }}>
+                  <div style={{ fontSize: '1.5rem', fontWeight: 'bold', color: '#059669' }}>
+                    {migrationData.overview.processed.toLocaleString()}
+                  </div>
+                  <div style={{ fontSize: '0.875rem', color: '#6b7280' }}>Processed</div>
+                </div>
+                <div style={{ textAlign: 'center' }}>
+                  <div style={{ fontSize: '1.5rem', fontWeight: 'bold', color: '#d97706' }}>
+                    {migrationData.overview.inProgress.toLocaleString()}
+                  </div>
+                  <div style={{ fontSize: '0.875rem', color: '#6b7280' }}>In Progress</div>
+                </div>
+                <div style={{ textAlign: 'center' }}>
+                  <div style={{ fontSize: '1.5rem', fontWeight: 'bold', color: '#dc2626' }}>
+                    {migrationData.overview.pending.toLocaleString()}
+                  </div>
+                  <div style={{ fontSize: '0.875rem', color: '#6b7280' }}>Pending</div>
+                </div>
+                <div style={{ textAlign: 'center' }}>
+                  <div style={{ fontSize: '1.5rem', fontWeight: 'bold', color: '#2563eb' }}>
+                    {migrationData.overview.overallProgress}%
+                  </div>
+                  <div style={{ fontSize: '0.875rem', color: '#6b7280' }}>Complete</div>
+                </div>
+              </div>
+              
+              <div style={{ marginBottom: '1rem' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.5rem' }}>
+                  <span style={{ fontSize: '0.875rem', color: '#374151' }}>Overall Progress</span>
+                  <span style={{ fontSize: '0.875rem', fontWeight: '600' }}>{migrationData.overview.overallProgress}%</span>
+                </div>
+                <div style={styles.progressBar}>
+                  <div style={styles.progressFill(migrationData.overview.overallProgress)}></div>
+                </div>
+              </div>
+            </div>
+
+            <div style={styles.card}>
+              <h3 style={{ fontSize: '1.25rem', fontWeight: '600', marginBottom: '1rem', color: '#111827' }}>
+                Migration Categories
+              </h3>
+              <div style={{ display: 'grid', gap: '1rem' }}>
+                {migrationData.categories.map((category, idx) => (
+                  <div key={idx} style={styles.migrationCard}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.5rem' }}>
+                      <h4 style={{ fontSize: '0.875rem', fontWeight: '600', color: '#374151' }}>{category.name}</h4>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                        <span style={{ fontSize: '0.75rem', color: '#6b7280' }}>
+                          {category.completed.toLocaleString()} / {category.total.toLocaleString()}
+                        </span>
+                        <span style={{
+                          fontSize: '0.75rem',
+                          fontWeight: '500',
+                          color: category.status === 'Complete' ? '#059669' : '#d97706'
+                        }}>
+                          {category.status}
+                        </span>
+                      </div>
+                    </div>
+                    <div style={styles.progressBar}>
+                      <div style={styles.progressFill(
+                        category.progress, 
+                        category.status === 'Complete' ? '#10b981' : '#f59e0b'
+                      )}></div>
+                    </div>
+                    <div style={{ fontSize: '0.75rem', color: '#6b7280', marginTop: '0.25rem' }}>
+                      {category.progress}% complete
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <div style={styles.card}>
+              <h3 style={{ fontSize: '1.25rem', fontWeight: '600', marginBottom: '1rem', color: '#111827' }}>
+                Recent Migration Activity
+              </h3>
+              <div style={{ maxHeight: '400px', overflowY: 'auto' }}>
+                {migrationData.recentActivity.map((activity, idx) => (
+                  <div key={idx} style={{ 
+                    display: 'flex', 
+                    alignItems: 'center', 
+                    padding: '0.75rem 0', 
+                    borderBottom: idx < migrationData.recentActivity.length - 1 ? '1px solid #e5e7eb' : 'none'
+                  }}>
+                    <div style={{ 
+                      width: '0.5rem', 
+                      height: '0.5rem', 
+                      borderRadius: '50%', 
+                      backgroundColor: activity.type === 'success' ? '#10b981' : 
+                                     activity.type === 'warning' ? '#f59e0b' : '#3b82f6',
+                      marginRight: '1rem',
+                      flexShrink: 0
+                    }}></div>
+                    <div style={{ flex: 1 }}>
+                      <div style={{ fontSize: '0.875rem', color: '#374151', marginBottom: '0.25rem' }}>
+                        {activity.action}
+                      </div>
+                      <div style={{ fontSize: '0.75rem', color: '#9ca3af' }}>
+                        {activity.time}
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <div style={{ display: 'flex', gap: '1rem', marginTop: '1rem' }}>
+              <button style={styles.button}>
+                <Upload style={{ width: '1rem', height: '1rem', marginRight: '0.5rem' }} />
+                Upload New Data
+              </button>
+              <button style={{ ...styles.button, backgroundColor: '#059669' }}>
+                <Download style={{ width: '1rem', height: '1rem', marginRight: '0.5rem' }} />
+                Export Migration Report
+              </button>
+              <button style={{ ...styles.button, backgroundColor: '#7c3aed' }}>
+                <FileText style={{ width: '1rem', height: '1rem', marginRight: '0.5rem' }} />
+                View Logs
+              </button>
+            </div>
+          </div>
+        )}
+
+        {activeTab === 'attributes' && (
+          <div>
+            <h2 style={{ fontSize: '1.875rem', fontWeight: 'bold', marginBottom: '1.5rem', color: '#111827' }}>
+              Albertsons Product Attribute Management
+            </h2>
+            
+            <div style={styles.grid}>
+              {[
+                { name: 'Store Brand Attributes', count: 847, color: '#2563eb', description: 'O Organics, Culinary Circle, etc.' },
+                { name: 'Organic & Clean Label', count: 1205, color: '#059669', description: 'USDA Organic, Non-GMO, Clean' },
+                { name: 'Allergen Information', count: 534, color: '#dc2626', description: 'Contains, Free From claims' },
+                { name: 'Nutritional Claims', count: 892, color: '#7c3aed', description: 'High Protein, Low Sodium, etc.' },
+                { name: 'Dietary Preferences', count: 678, color: '#d97706', description: 'Vegan, Keto, Paleo, Gluten-Free' },
+                { name: 'Premium & Artisan', count: 234, color: '#059669', description: 'Culinary Circle, Stockman & Dakota' }
+              ].map((attr, idx) => (
+                <div key={idx} style={{
+                  ...styles.card,
+                  borderLeft: `4px solid ${attr.color}`
+                }}>
+                  <h3 style={{ fontSize: '1rem', fontWeight: '600', color: '#111827', marginBottom: '0.5rem' }}>
+                    {attr.name}
+                  </h3>
+                  <p style={{ fontSize: '2rem', fontWeight: 'bold', color: attr.color, marginBottom: '0.5rem' }}>
+                    {attr.count.toLocaleString()}
+                  </p>
+                  <p style={{ fontSize: '0.875rem', color: '#6b7280' }}>{attr.description}</p>
+                </div>
+              ))}
+            </div>
+
+            <div style={styles.card}>
+              <h3 style={{ fontSize: '1.25rem', fontWeight: '600', marginBottom: '1rem', color: '#111827' }}>
+                Popular Attribute Combinations
+              </h3>
+              <div style={{ display: 'grid', gap: '0.5rem' }}>
+                {[
+                  { combo: 'Organic + Non-GMO + Vegan', count: 189, products: ['O Organics Cereals', 'Wild Harvest Snacks'] },
+                  { combo: 'Gluten-Free + High Protein + Clean Label', count: 156, products: ['Equaline Yogurts', 'Premium Bars'] },
+                  { combo: 'Grass-Fed + Hormone-Free + Premium', count: 89, products: ['Stockman & Dakota Beef'] },
+                  { combo: 'Wild-Caught + Sustainable + Omega-3', count: 67, products: ['Arctic Shores Seafood'] }
+                ].map((item, idx) => (
+                  <div key={idx} style={{
+                    display: 'flex', 
+                    justifyContent: 'space-between', 
+                    alignItems: 'center', 
+                    padding: '1rem', 
+                    backgroundColor: '#f9fafb', 
+                    borderRadius: '0.5rem',
+                    border: '1px solid #e5e7eb'
+                  }}>
+                    <div>
+                      <div style={{ fontSize: '0.875rem', fontWeight: '500', color: '#374151' }}>
+                        {item.combo}
+                      </div>
+                      <div style={{ fontSize: '0.75rem', color: '#9ca3af', marginTop: '0.25rem' }}>
+                        Common in: {item.products.join(', ')}
+                      </div>
+                    </div>
+                    <div style={{ fontSize: '0.875rem', fontWeight: '600', color: '#2563eb' }}>
+                      {item.count} products
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        )}
+      </main>
+
+      {/* Modals */}
+      {showAttributeModal && (
+        <AttributeModal 
+          product={selectedProduct} 
+          onClose={() => {
+            setShowAttributeModal(false);
+            setSelectedProduct(null);
+          }} 
+        />
+      )}
+
+      {showImportModal && <ImportModal />}
+    </div>
+  );
+};
+
+export default NielsenIQLabelInsight;

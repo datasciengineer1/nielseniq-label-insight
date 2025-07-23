@@ -1,0 +1,16 @@
+  tabButton: {
+    padding: '1rem 0.5rem',
+    marginRight: '2rem',
+    border: 'none',
+    background: 'none',
+    cursor: 'pointer',
+    borderBottomWidth: '2px',
+    borderBottomStyle: 'solid',
+    borderBottomColor: 'transparent',
+    display: 'inline-flex',
+    alignItems: 'center'
+  },
+  activeTab: {
+    borderBottomColor: '#3b82f6',
+    color: '#2563eb'
+  },

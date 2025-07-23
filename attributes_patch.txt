@@ -1,0 +1,6 @@
+        {activeTab === 'attributes' && (
+          <div>
+            <VisualTest />
+            <h2 style={{ fontSize: '1.875rem', fontWeight: 'bold', marginBottom: '1.5rem', color: '#111827' }}>
+              Albertsons Product Attribute Analytics
+            </h2>
