@@ -92,7 +92,7 @@ const migrationData = {
   ]
 };
 
-const NielsenIQLabelInsight = () => {
+const ABCIQLabelInsight = () => {
   const [activeTab, setActiveTab] = useState('dashboard');
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('All');
@@ -104,7 +104,7 @@ const NielsenIQLabelInsight = () => {
   const [expandedProduct, setExpandedProduct] = useState(null);
   const [aiChatOpen, setAiChatOpen] = useState(false);
   const [aiMessages, setAiMessages] = useState([
-    { type: 'ai', content: 'Hi! I\'m your NielsenIQ assistant. Ask me about coverage, attributes, search, or any features!', timestamp: Date.now() }
+    { type: 'ai', content: 'Hi! I\'m your ABC IQ assistant. Ask me about coverage, attributes, search, or any features!', timestamp: Date.now() }
   ]);
   const [aiInput, setAiInput] = useState('');
 
@@ -132,11 +132,11 @@ const NielsenIQLabelInsight = () => {
     } else if (text.includes('export')) {
       return "Export options: JSON (full data structure) or CSV (spreadsheet format). Use JSON for technical work, CSV for analysis in Excel.";
     } else if (text.includes('migration')) {
-      return "Data migration shows progress of integrating NielsenIQ Label Insight data. Categories show completion status for different data types like organic claims and nutrition facts.";
+      return "Data migration shows progress of integrating ABC IQ Label Insight data. Categories show completion status for different data types like organic claims and nutrition facts.";
     } else if (text.includes('help') || text.includes('how')) {
       return "I can help with:\n• Product coverage and quality\n• Attribute explanations\n• Search and filtering\n• Export functions\n• Migration progress\n\nJust ask about any specific feature!";
     } else {
-      return "I can help explain NielsenIQ features! Try asking about 'coverage', 'attributes', 'search', 'export', or 'migration'. What would you like to know?";
+      return "I can help explain ABC IQ features! Try asking about 'coverage', 'attributes', 'search', 'export', or 'migration'. What would you like to know?";
     }
   };
 
@@ -426,7 +426,7 @@ const NielsenIQLabelInsight = () => {
       <header style={{ backgroundColor: 'white', borderBottom: '1px solid #e5e7eb', padding: '1rem 2rem' }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
           <div>
-            <h1 style={{ fontSize: '1.5rem', fontWeight: 'bold', color: '#2563eb' }}>NielsenIQ</h1>
+            <h1 style={{ fontSize: '1.5rem', fontWeight: 'bold', color: '#2563eb' }}>ABC IQ</h1>
             <p style={{ fontSize: '0.875rem', color: '#6b7280' }}>Label Insight Platform - ABC Company INC. Companies</p>
           </div>
           <div style={{ fontSize: '0.875rem', color: '#6b7280' }}>
@@ -841,4 +841,4 @@ const NielsenIQLabelInsight = () => {
   );
 };
 
-export default NielsenIQLabelInsight;
+export default ABCIQLabelInsight;
